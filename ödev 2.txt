@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int veri;
+    struct Node* sonraki;
+};
+
+int eleman_sayisini_bul(struct Node* baslangic) {
+    int sayac = 0;
+    struct Node* mevcut = baslangic;
+    while (mevcut != NULL) {
+        sayac++;
+        mevcut = mevcut->sonraki;
+    }
+    return sayac;
+}
+
+void eleman_ekle(struct Node** baslangic, int veri) {
+    struct Node* yeni_node = (struct Node*)malloc(sizeof(struct Node));
+    yeni_node->veri = veri;
+    yeni_node->sonraki = NULL;
+
+    if (*baslangic == NULL) {
+        *baslangic = yeni_node;
+    } else {
+        struct Node* mevcut = *baslangic;
+        while (mevcut->sonraki != NULL) {
+            mevcut = mevcut->sonraki;
+        }
+        mevcut->sonraki = yeni_node;
+    }
+}
+
+int main() {
+    struct Node* liste = NULL;
+    eleman_ekle(&liste, 5);
+    eleman_ekle(&liste, 8);
+    eleman_ekle(&liste, 3);
+    eleman_ekle(&liste, 1);
+    eleman_ekle(&liste, 9);
+    eleman_ekle(&liste, 2);
+
+    int eleman_sayisi = eleman_sayisini_bul(liste);
+    printf("Eleman sayisi: %d\n", eleman_sayisi);
+
+    return 0;
+}

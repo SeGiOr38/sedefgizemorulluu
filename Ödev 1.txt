@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int en_buyuk_sayiyi_bul(int dizi[], int boyut) {
+    int en_buyuk = dizi[0];  // Başlangıçta en büyük sayıyı dizi[0] olarak varsayalım
+    for (int i = 1; i < boyut; i++) {
+        if (dizi[i] > en_buyuk) {
+            en_buyuk = dizi[i];
+        }
+    }
+    return en_buyuk;
+}
+
+int main() {
+    int dizi[] = {5, 8, 3, 1, 9, 2};
+    int boyut = sizeof(dizi) / sizeof(dizi[0]);
+    
+    int en_buyuk_sayi = en_buyuk_sayiyi_bul(dizi, boyut);
+    printf("En büyük sayı: %d\n", en_buyuk_sayi);
+    
+    return 0;
+}

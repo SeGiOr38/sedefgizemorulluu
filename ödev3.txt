@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void tekrar_edenleri_bul(int dizi[], int boyut) {
+    // Elemanları takip etmek için bir hash tablosu oluşturuluyor
+    int* hash_tablosu = (int*)calloc(1000, sizeof(int));
+
+    printf("Tekrar Eden Elemanlar: ");
+    for (int i = 0; i < boyut; i++) {
+        // Elemanın hash tablosunda olup olmadığını kontrol ediyoruz
+        if (hash_tablosu[dizi[i]] == 1) {
+            printf("%d ", dizi[i]);
+        } else {
+            // Elemanı hash tablosuna ekliyoruz
+            hash_tablosu[dizi[i]] = 1;
+        }
+    }
+    printf("\n");
+
+    free(hash_tablosu);
+}
+
+int main() {
+    int dizi[] = {5, 8, 3, 1, 9, 2, 5, 3, 8};
+    int boyut = sizeof(dizi) / sizeof(dizi[0]);
+
+    tekrar_edenleri_bul(dizi, boyut);
+
+    return 0;
+}

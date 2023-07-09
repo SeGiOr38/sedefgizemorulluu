@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+#define ALFABE_UZUNLUGU 26
+
+struct TrieNode {
+    struct TrieNode* cocuk[ALFABE_UZUNLUGU];
+    bool kelime_sonu;
+};
+
+struct TrieNode* dugum_olustur() {
+    struct TrieNode* yeni_dugum = (struct TrieNode*)malloc(sizeof(struct TrieNode));
+    yeni_dugum->kelime_sonu = false;
+    for (int i = 0; i < ALFABE_UZUNLUGU; i++) {
+        yeni_dugum->cocuk[i] = NULL;
+    }
+    return yeni_dugum;
+}
+
+void ekle(struct TrieNode* kok, const char* kelime) {
+    int uzunluk = strlen(kelime);
+    struct TrieNode* mevcut = kok;
+
+    for (int seviye = 0; seviye < uzunluk; seviye++) {
+        int indeks = kelime[seviye] - 'a';
+        if (!mevcut->cocuk[indeks]) {
+            mevcut->cocuk[indeks] = dugum_olustur();
+        }
+        mevcut = mevcut->cocuk[indeks];
+    }
+
+    mevcut->kelime_sonu = true;
+}
+
+void kelime_baslayanlari_bul(struct TrieNode* kok, const char* baslangic) {
+    int uzunluk = strlen(baslangic);
+    struct TrieNode* mevcut = kok;
+
+    for (int seviye = 0; seviye < uzunluk; seviye++) {
+        int indeks = baslangic[seviye] - 'a';
+        if (!mevcut->cocuk[indeks]) {
+            return;
+        }
+        mevcut = mevcut->cocuk[indeks];
+    }
+
+    kelime_baslayanlari_yardimci(mevcut, baslangic, uzunluk);
+}
+
+void kelime_baslayanlari_yardimci(struct TrieNode* dugum, char* kelime, int pozisyon) {
+    if (dugum == NULL)
+        return;
+
+    if (dugum->kelime_sonu)
+        printf("%s\n", kelime);
+
+    for (int i = 0; i < ALFABE_UZUNLUGU; i++) {
+        if (dugum->cocuk[i]) {
+            kelime[pozisyon] = i + 'a';
+            kelime_baslayanlari_yardimci(dugum->cocuk[i], kelime, pozisyon + 1);
+        }
+    }
+}
+
+int main() {
+    struct TrieNode* kok = dugum_olustur();
+
+    char* metin_listesi[] = {"apple", "application", "banana", "art", "ball", "cat"};
+    int metin_listesi_boyutu = sizeof(metin_listesi) / sizeof(metin_listesi[0]);
+
+    for (int i = 0; i < metin_listesi_boyutu; i++) {
+        ekle(kok, metin_listesi[i]);
+    }
+
+    char baslangic[20];
+    printf("Baslayan kelimeyi girin: ");
+    scanf("%s", baslangic);
+
+    kelime_baslayanlari_bul(kok, baslangic);
+
+    return 0;
+}
